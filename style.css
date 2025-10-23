@@ -1,3 +1,4 @@
+/* โค้ด CSS เดิม... */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f9;
@@ -15,7 +16,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 400px;
+    max-width: 450px; /* ขยายเล็กน้อย */
     text-align: center;
 }
 
@@ -24,6 +25,53 @@ h1 {
     margin-bottom: 20px;
 }
 
+hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0));
+    margin: 25px 0;
+}
+
+/* สไตล์ใหม่สำหรับนาฬิกาจับเวลา */
+#stopwatch-section {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    background-color: #e3f2fd; /* สีฟ้าอ่อน */
+}
+
+#display {
+    font-size: 3.5em;
+    font-weight: bold;
+    color: #d9534f; /* สีแดงสำหรับเวลา */
+    margin: 10px 0;
+    font-family: 'Courier New', monospace;
+}
+
+#stopwatch-section button {
+    width: 48%;
+    padding: 10px;
+    margin: 5px 1%;
+    font-size: 16px;
+}
+
+#start-btn {
+    background-color: #5cb85c; /* เขียว */
+}
+
+#start-btn:hover {
+    background-color: #4cae4c;
+}
+
+#lap-btn {
+    background-color: #f0ad4e; /* ส้ม */
+}
+
+#lap-btn:hover {
+    background-color: #ec971f;
+}
+
+/* สไตล์เดิมสำหรับส่วนป้อนข้อมูลและผลลัพธ์ */
 .input-group {
     text-align: left;
     margin-bottom: 15px;
@@ -32,6 +80,55 @@ h1 {
 label {
     display: block;
     margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="number"] {
+    width: 95%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; 
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+.results {
+    margin-top: 30px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #e9ecef;
+}
+
+.results h2 {
+    color: #333;
+    margin-top: 0;
+}
+
+#avg-time {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+#productivity {
+    font-size: 1.3em;
+    color: #007bff;
     font-weight: bold;
 }
 
