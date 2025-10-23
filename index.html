@@ -25,8 +25,9 @@
                         </filter>
 
                         <linearGradient id="liquid-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#d9534f;stop-opacity:1" /> <stop offset="50%" style="stop-color:#f0ad4e;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#d9534f;stop-opacity:1" />
+                            <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" /> 
+                            <stop offset="50%" style="stop-color:#8BC34A;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#4CAF50;stop-opacity:1" />
                         </linearGradient>
                     </defs>
                     
@@ -34,6 +35,41 @@
                     
                     <circle class="progress" cx="50" cy="50" r="45" id="progress-circle" filter="url(#liquid-effect)"></circle>
                 </svg>
+                
+                <div id="display" class="time-display">00:00.00</div>
+            </div>
+            
+            <div id="lap-times">
+                </div>
+            
+            <div class="stopwatch-controls">
+                <button id="reset-btn" disabled class="control-btn reset-btn">↺</button>
+                <button id="start-btn" class="control-btn start-btn">▶</button>
+                <button id="lap-btn" disabled class="control-btn lap-btn">บันทึก</button>
+            </div>
+        </div>
+        
+        <hr>
+        
+        <div id="productivity-inputs">
+             <p>เวลา (วินาที) ที่บันทึก:</p>
+            <input type="hidden" id="time1">
+            <input type="hidden" id="time2">
+            <input type="hidden" id="time3">
+        </div>
+
+        <button type="button" class="calculate-btn" id="calculate-btn">คำนวณผลผลิต</button>
+
+        <div id="results" class="results">
+            <h2>ผลลัพธ์</h2>
+            <p id="avg-time">เวลาเฉลี่ย: - วินาทีต่อชิ้น</p>
+            <p id="productivity">ผลผลิตต่อชั่วโมง: - ชิ้น</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
                 
                 <div id="display" class="time-display">00:00.00</div>
             </div>
