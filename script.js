@@ -1,4 +1,23 @@
-// ... โค้ดส่วนบนเหมือนเดิม ...
+// =======================================================
+// ตัวแปรสำหรับนาฬิกาจับเวลา
+// =======================================================
+let startTime = 0;
+let elapsedTime = 0; // เวลารวมที่ผ่านไป (เป็น milliseconds)
+let tInterval;
+let running = false;
+let lapCounter = 1; 
+
+// กำหนดขีดจำกัดเวลาสูงสุดสำหรับการแสดงผลวงแหวน (60 วินาทีต่อรอบ)
+const MAX_TIME_SECONDS = 60; 
+const DASH_ARRAY = 283; 
+
+// เชื่อมโยงตัวแปรกับ Element ใน HTML
+const display = document.getElementById('display');
+const startBtn = document.getElementById('start-btn');
+const lapBtn = document.getElementById('lap-btn');
+const resetBtn = document.getElementById('reset-btn');
+const progressCircle = document.getElementById('progress-circle');
+const lapTimesDiv = document.getElementById('lap-times');
 
 // =======================================================
 // ฟังก์ชันนาฬิกาจับเวลา
@@ -9,25 +28,52 @@
  */
 function startStopwatch() {
     if (!running) {
-        // เริ่มต้นการทำงาน (โดยรักษาค่า elapsedTime ไว้)
-        startTime = Date.now() - elapsedTime;
+        // *** แก้ไขจุดสำคัญ: ให้นำ elapsedTime เดิม มาลบออกจากเวลาปัจจุบัน ***
+        // เพื่อให้ startTime กลายเป็นจุดเริ่มต้นของเวลาที่ควรจะเป็น
+        startTime = Date.now() - elapsedTime; 
+        
         tInterval = setInterval(getShowTime, 10); 
         
-        startBtn.innerHTML = "❚❚"; // เปลี่ยนเป็นปุ่มหยุด (Pause)
-        startBtn.classList.add('running'); // เพิ่มคลาสเพื่อเปลี่ยนสี
+        startBtn.innerHTML = "❚❚"; 
+        startBtn.classList.add('running'); 
         lapBtn.disabled = false;
         resetBtn.disabled = false; 
         running = true;
     } else {
         // หยุดการทำงานชั่วคราว
         clearInterval(tInterval);
-        startBtn.innerHTML = "▶"; // เปลี่ยนเป็นปุ่มเริ่ม (Play)
-        startBtn.classList.remove('running'); // ลบคลาสสีแดงออก
+        startBtn.innerHTML = "▶"; 
+        startBtn.classList.remove('running'); 
         running = false;
     }
 }
 
-// ... โค้ด getShowTime เหมือนเดิม ...
+/**
+ * ฟังก์ชันแสดงผลเวลาที่ผ่านไปและอัปเดตวงแหวน
+ */
+function getShowTime() {
+    // *** แก้ไขจุดสำคัญ: คำนวณ elapsedTime ใหม่ทุกครั้ง ***
+    elapsedTime = Date.now() - startTime;
+
+    // คำนวณเวลา
+    let totalSeconds = Math.floor(elapsedTime / 1000);
+    let minutes = Math.floor(totalSeconds / 60);
+    let seconds = totalSeconds % 60;
+    let milliseconds = Math.floor((elapsedTime % 1000) / 10);
+    
+    // อัปเดต Display
+    const formattedTime = 
+        (minutes < 10 ? "0" + minutes : minutes) + ":" + 
+        (seconds < 10 ? "0" + seconds : seconds) + "." + 
+        (milliseconds < 10 ? "0" + milliseconds : milliseconds);
+
+    display.innerHTML = formattedTime;
+
+    // อัปเดตวงแหวน
+    let progress = totalSeconds % MAX_TIME_SECONDS;
+    let percentage = (progress / MAX_TIME_SECONDS) * DASH_ARRAY;
+    progressCircle.style.strokeDashoffset = DASH_ARRAY - percentage;
+}
 
 /**
  * ฟังก์ชันรีเซ็ตนาฬิกาทั้งหมด
@@ -42,8 +88,7 @@ function resetStopwatch() {
     display.innerHTML = "00:00.00";
     progressCircle.style.strokeDashoffset = DASH_ARRAY;
     startBtn.innerHTML = "▶";
-    startBtn.classList.remove('running'); // ตรวจสอบให้แน่ใจว่าลบคลาสออกเมื่อรีเซ็ต
-    startBtn.style.backgroundColor = 'var(--primary-color)'; /* ตั้งค่าสีกลับไปเป็นสีเขียวเริ่มต้น */
+    startBtn.classList.remove('running'); 
     lapBtn.disabled = true;
     resetBtn.disabled = true;
     
@@ -51,7 +96,7 @@ function resetStopwatch() {
     document.getElementById('time1').value = '';
     document.getElementById('time2').value = '';
     document.getElementById('time3').value = '';
-    lapTimesDiv.innerHTML = '<div class="lap-header"><div>#</div><div>เวลา Lap</div><div>รวม</div></div>'; // เพิ่ม header กลับเข้าไป
+    lapTimesDiv.innerHTML = '<div class="lap-header"><div>#</div><div>เวลา Lap</div><div>รวม</div></div>';
     
     document.getElementById('avg-time').textContent = "เวลาเฉลี่ย: - วินาทีต่อชิ้น";
     document.getElementById('productivity').textContent = "ผลผลิตต่อชั่วโมง: - ชิ้น";
@@ -67,8 +112,8 @@ function lapTime() {
         return;
     }
     
-    const currentLapTotalTime = elapsedTime / 1000; // เวลารวมตั้งแต่เริ่ม
-    let lapDuration = currentLapTotalTime; // เริ่มต้นให้ Lap duration เป็น total time
+    const currentLapTotalTime = elapsedTime / 1000;
+    let lapDuration = currentLapTotalTime; 
 
     // หากมีการบันทึก Lap ก่อนหน้านี้, คำนวณ Lap Duration จริง
     if (lapCounter > 1) {
@@ -98,10 +143,11 @@ function lapTime() {
     
     lapCounter++;
     
-    // 4. รีเซ็ตนาฬิกาเพื่อเริ่มจับเวลาชิ้นงานถัดไปทันที (โดยไม่หยุดการทำงานของ TInterval)
-    // แค่รีเซ็ตเวลาเริ่มต้นใหม่ (elapsedTime ยังคงนับต่อจาก startTime ใหม่)
-    startTime = Date.now(); 
-    elapsedTime = 0; // รีเซ็ต elapsedTime เพื่อให้ getShowTime นับจาก 0 ใหม่สำหรับ Lap ถัดไป
+    // 4. *** แก้ไขจุดสำคัญ: รีเซ็ตเวลาเริ่มต้นใหม่ เพื่อให้ Lap ถัดไปนับจาก 0 ***
+    // เราต้องนำ total time ที่เพิ่งบันทึกไป มากำหนดเป็นจุดเริ่มต้นใหม่
+    elapsedTime = currentLapTotalTime * 1000; // แปลงกลับเป็น ms
+    startTime = Date.now() - elapsedTime; // กำหนดจุดเริ่มต้นใหม่ โดยหัก Lap Time ออก
+    elapsedTime = 0; // ตั้งค่า elapsedTime เป็น 0 เพื่อให้ Lap ใหม่นับจากศูนย์
 }
 
 /**
@@ -129,18 +175,46 @@ function addLapTimeToDisplay(index, lapDuration, totalTime) {
         <div class="total-time">${formatTime(totalTime)}</div>
     `;
 
-    // เพิ่ม Lap ใหม่ไว้ด้านบนสุดของรายการ (ใต้ header)
     const header = lapTimesDiv.querySelector('.lap-header');
     if (header) {
         lapTimesDiv.insertBefore(newRow, header.nextSibling);
     } else {
-        lapTimesDiv.appendChild(newRow); // ถ้าไม่มี header ก็เพิ่มเข้าไปเลย
+        lapTimesDiv.appendChild(newRow);
     }
 }
 
 // สร้าง header ของตาราง Lap Time เมื่อโหลดหน้าเว็บ
 document.addEventListener('DOMContentLoaded', () => {
+    // ต้องเรียกใช้ฟังก์ชันนี้เพื่อให้แน่ใจว่า progress circle ถูกดึงค่ามาใช้ก่อน
+    // และใส่ header ของตาราง Lap Time
     lapTimesDiv.innerHTML = '<div class="lap-header"><div>#</div><div>เวลา Lap</div><div>รวม</div></div>';
 });
 
-// ... โค้ด calculateProductivity เหมือนเดิม ...
+
+// =======================================================
+// ฟังก์ชันคำนวณผลผลิต
+// =======================================================
+function calculateProductivity() {
+    const time1 = parseFloat(document.getElementById('time1').value);
+    const time2 = parseFloat(document.getElementById('time2').value);
+    const time3 = parseFloat(document.getElementById('time3').value);
+
+    // ตรวจสอบว่ามีข้อมูลครบถ้วนหรือไม่
+    if (isNaN(time1) || isNaN(time2) || isNaN(time3) || time1 <= 0 || time2 <= 0 || time3 <= 0) {
+        // ไม่ต้อง alert เมื่อคำนวณอัตโนมัติหลัง Lap 3 (เพื่อให้ flow ราบรื่น)
+        // แต่ถ้าเป็นการกดปุ่มคำนวณด้วยมือ ยังคง alert
+        if (lapCounter < 3) {
+            alert("กรุณาบันทึกเวลาที่ถูกต้องครบทั้ง 3 ครั้ง ก่อนคำนวณ");
+        }
+        document.getElementById('avg-time').textContent = "เวลาเฉลี่ย: - วินาทีต่อชิ้น";
+        document.getElementById('productivity').textContent = "ผลผลิตต่อชั่วโมง: - ชิ้น";
+        return;
+    }
+
+    const averageTime = (time1 + time2 + time3) / 3;
+    const SECONDS_PER_HOUR = 3600;
+    const productivityPerHour = SECONDS_PER_HOUR / averageTime;
+
+    document.getElementById('avg-time').textContent = `เวลาเฉลี่ย: ${averageTime.toFixed(2)} วินาทีต่อชิ้น`;
+    document.getElementById('productivity').textContent = `ผลผลิตต่อชั่วโมง: ${productivityPerHour.toFixed(2)} ชิ้น`;
+}
