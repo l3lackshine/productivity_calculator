@@ -11,30 +11,36 @@
         <h1>คำนวณผลผลิตต่อชั่วโมง</h1>
         
         <div id="stopwatch-section">
-            <h2>⏱️ นาฬิกาจับเวลา</h2>
-            <div id="display">0.00</div>
-            <button id="start-btn" onclick="startStopwatch()">เริ่ม</button>
-            <button id="lap-btn" onclick="lapTime()" disabled>บันทึก/รีเซ็ต</button>
+            <h2>นาฬิกาจับเวลา</h2>
+            
+            <div class="circular-progress">
+                <svg viewBox="0 0 100 100">
+                    <circle class="bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="progress" cx="50" cy="50" r="45" id="progress-circle"></circle>
+                </svg>
+                <div id="display" class="time-display">00:00.00</div>
+            </div>
+            
+            <div id="lap-times">
+                </div>
+            
+            <div class="stopwatch-controls">
+                <button id="reset-btn" onclick="resetStopwatch()" disabled class="control-btn reset-btn">↺</button>
+                <button id="start-btn" onclick="startStopwatch()" class="control-btn start-btn">▶</button>
+                <button id="lap-btn" onclick="lapTime()" disabled class="control-btn lap-btn">บันทึก</button>
+            </div>
         </div>
         
         <hr>
         
-        <p>ป้อนเวลา (วินาที) ที่ได้จากการจับเวลา 3 ครั้ง</p>
-
-        <div class="input-group">
-            <label for="time1">เวลาที่ 1 (วินาที):</label>
-            <input type="number" id="time1" min="0" step="0.01" required>
-        </div>
-        <div class="input-group">
-            <label for="time2">เวลาที่ 2 (วินาที):</label>
-            <input type="number" id="time2" min="0" step="0.01" required>
-        </div>
-        <div class="input-group">
-            <label for="time3">เวลาที่ 3 (วินาที):</label>
-            <input type="number" id="time3" min="0" step="0.01" required>
+        <div id="productivity-inputs">
+             <p>เวลา (วินาที) ที่บันทึก:</p>
+            <input type="hidden" id="time1">
+            <input type="hidden" id="time2">
+            <input type="hidden" id="time3">
         </div>
 
-        <button type="button" onclick="calculateProductivity()">คำนวณผลผลิต</button>
+        <button type="button" class="calculate-btn" onclick="calculateProductivity()">คำนวณผลผลิต</button>
 
         <div id="results" class="results">
             <h2>ผลลัพธ์</h2>
@@ -44,7 +50,5 @@
     </div>
 
     <script src="script.js"></script>
-</body>
-</html>
 </body>
 </html>

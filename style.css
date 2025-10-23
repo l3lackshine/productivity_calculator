@@ -1,4 +1,3 @@
-/* โค้ด CSS เดิม... */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f9;
@@ -16,7 +15,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 450px; /* ขยายเล็กน้อย */
+    max-width: 450px;
     text-align: center;
 }
 
@@ -32,80 +31,129 @@ hr {
     margin: 25px 0;
 }
 
-/* สไตล์ใหม่สำหรับนาฬิกาจับเวลา */
+/* ==================================== */
+/* สไตล์นาฬิกาแบบวงแหวน */
+/* ==================================== */
 #stopwatch-section {
-    padding: 10px;
-    border-radius: 5px;
     margin-bottom: 20px;
-    background-color: #e3f2fd; /* สีฟ้าอ่อน */
 }
 
-#display {
-    font-size: 3.5em;
+.circular-progress {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin: 20px auto;
+}
+
+.circular-progress svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg); /* เริ่มที่ด้านบน */
+}
+
+.circular-progress circle {
+    fill: none;
+    stroke-width: 8;
+}
+
+.circular-progress .bg {
+    stroke: #eee;
+}
+
+.circular-progress .progress {
+    stroke: #007bff;
+    stroke-dasharray: 283; /* 2 * PI * r (2 * 3.14 * 45 ≈ 282.7) */
+    stroke-dashoffset: 283; /* เริ่มต้นที่เต็มวง */
+    transition: stroke-dashoffset 0.1s linear;
+    stroke-linecap: round;
+}
+
+.time-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.2em;
     font-weight: bold;
-    color: #d9534f; /* สีแดงสำหรับเวลา */
-    margin: 10px 0;
-    font-family: 'Courier New', monospace;
+    color: #333;
 }
 
-#stopwatch-section button {
-    width: 48%;
-    padding: 10px;
-    margin: 5px 1%;
-    font-size: 16px;
+/* ==================================== */
+/* สไตล์ปุ่มควบคุม */
+/* ==================================== */
+.stopwatch-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    gap: 15px;
 }
 
-#start-btn {
-    background-color: #5cb85c; /* เขียว */
+.control-btn {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 20px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
-#start-btn:hover {
-    background-color: #4cae4c;
+.start-btn {
+    background-color: #007bff;
+    width: 80px;
+    height: 80px;
+    font-size: 30px;
 }
 
-#lap-btn {
-    background-color: #f0ad4e; /* ส้ม */
+.start-btn:hover { background-color: #0056b3; }
+.reset-btn { background-color: #6c757d; }
+.lap-btn { background-color: #28a745; }
+
+.reset-btn:hover { background-color: #5a6268; }
+.lap-btn:hover { background-color: #1e7e34; }
+
+/* ==================================== */
+/* สไตล์ตาราง Lap Time (ใหม่) */
+/* ==================================== */
+#lap-times {
+    width: 80%;
+    margin: 20px auto 0;
 }
 
-#lap-btn:hover {
-    background-color: #ec971f;
+.lap-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 1.1em;
 }
 
-/* สไตล์เดิมสำหรับส่วนป้อนข้อมูลและผลลัพธ์ */
-.input-group {
+.lap-row .lap-index {
+    font-weight: bold;
+    width: 10%;
     text-align: left;
-    margin-bottom: 15px;
+    color: #999;
 }
-
-label {
-    display: block;
-    margin-bottom: 5px;
+.lap-row .lap-value {
+    width: 45%;
+    text-align: right;
     font-weight: bold;
+    color: #333;
 }
 
-input[type="number"] {
-    width: 95%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box; 
+.lap-row:last-child {
+    border-bottom: none;
 }
 
-button {
-    background-color: #28a745;
+/* สไตล์ผลลัพธ์เดิม */
+.calculate-btn {
+    background-color: #007bff;
     color: white;
-    border: none;
     padding: 10px 20px;
     border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
     width: 100%;
-    transition: background-color 0.3s;
-}
-
-button:hover {
-    background-color: #218838;
 }
 
 .results {
@@ -114,65 +162,6 @@ button:hover {
     border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #e9ecef;
-}
-
-.results h2 {
-    color: #333;
-    margin-top: 0;
-}
-
-#avg-time {
-    font-size: 1.1em;
-    font-weight: bold;
-}
-
-#productivity {
-    font-size: 1.3em;
-    color: #007bff;
-    font-weight: bold;
-}
-
-input[type="number"] {
-    width: 95%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box; /* ทำให้ padding ไม่เพิ่มขนาดรวม */
-}
-
-button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-    width: 100%;
-    transition: background-color 0.3s;
-}
-
-button:hover {
-    background-color: #218838;
-}
-
-.results {
-    margin-top: 30px;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #e9ecef;
-}
-
-.results h2 {
-    color: #333;
-    margin-top: 0;
-}
-
-#avg-time {
-    font-size: 1.1em;
-    font-weight: bold;
 }
 
 #productivity {
