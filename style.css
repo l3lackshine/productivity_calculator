@@ -1,85 +1,294 @@
+/* นำเข้าฟอนต์ Google Fonts เพื่อความสวยงาม */
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&family=Montserrat:wght@400;600&display=swap');
+
+:root {
+    --primary-color: #4CAF50; /* เขียวสดใส */
+    --secondary-color: #2196F3; /* น้ำเงิน */
+    --accent-color: #FFC107; /* เหลือง */
+    --text-color-dark: #333;
+    --text-color-light: #fefefe;
+    --bg-light: #e0f2f7; /* พื้นหลังสีฟ้าอ่อน */
+    --bg-card: #ffffff;
+    --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
+    --shadow-deep: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
-    color: #333;
+    font-family: 'Kanit', sans-serif; /* ใช้ Kanit สำหรับภาษาไทย */
+    background-color: var(--bg-light);
+    color: var(--text-color-dark);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    padding: 20px;
+    box-sizing: border-box; /* สำคัญสำหรับการ responsive */
 }
 
 .container {
-    background-color: #fff;
-    padding: 30px 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background-color: var(--bg-card);
+    padding: 35px 30px;
+    border-radius: 15px;
+    box-shadow: var(--shadow-deep);
     width: 100%;
-    max-width: 450px;
+    max-width: 420px; /* ปรับให้แคบลงเล็กน้อย ดูทันสมัยขึ้น */
     text-align: center;
+    overflow: hidden; /* ป้องกันเงาหรือองค์ประกอบล้น */
 }
-/* ... โค้ดส่วนบนอื่นๆ เหมือนเดิม ... */
+
+h1 {
+    font-family: 'Montserrat', sans-serif; /* ใช้ Montserrat สำหรับหัวข้อ */
+    color: var(--primary-color);
+    margin-bottom: 25px;
+    font-weight: 600;
+    font-size: 1.8em;
+}
+
+h2 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-color-dark);
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+    margin: 30px 0;
+}
 
 /* ==================================== */
 /* สไตล์นาฬิกาแบบวงแหวน */
 /* ==================================== */
 #stopwatch-section {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    background-color: #f7f7f7; /* สีพื้นหลังอ่อนๆ สำหรับส่วนนาฬิกา */
+    padding: 15px 10px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .circular-progress {
     position: relative;
-    width: 250px;
-    height: 250px;
+    width: 220px; /* ปรับขนาดเล็กน้อย */
+    height: 220px;
     margin: 20px auto;
 }
 
 .circular-progress svg {
     width: 100%;
     height: 100%;
-    /* ไม่ต้อง rotate ที่นี่แล้ว เราจะใช้แอนิเมชันหมุนแทน */
 }
 
 .circular-progress circle {
     fill: none;
-    stroke-width: 12; /* เพิ่มความหนาของเส้นเพื่อให้เอฟเฟกต์ของเหลวเห็นชัด */
+    stroke-width: 10; /* ความหนาเส้น */
 }
 
 .circular-progress .bg {
-    stroke: #eee;
+    stroke: #e9e9e9; /* สีพื้นหลังวงแหวน */
 }
 
 .circular-progress .progress {
-    /* ใช้ Gradient ที่ประกาศใน HTML */
-    stroke: url(#liquid-gradient); 
-    stroke-dasharray: 283; 
+    stroke: url(#liquid-gradient);
+    stroke-dasharray: 283; /* 2 * PI * r (2 * 3.14159 * 45) */
     stroke-dashoffset: 283;
     transition: stroke-dashoffset 0.1s linear;
-    stroke-linecap: round; /* ทำให้ปลายเส้นมน */
-
-    /* แอนิเมชันสำหรับหมุน Gradient อย่างต่อเนื่อง */
-    animation: rotateGradient 1s linear infinite; 
+    stroke-linecap: round;
+    animation: rotateGradient 1s linear infinite; /* ทำให้ Gradient หมุนต่อเนื่อง */
     transform-origin: 50% 50%;
 }
 
-/* Keyframes สำหรับการหมุน Gradient ให้ดูเหมือนไหลเร็วกว่าเดิม */
+/* Keyframes สำหรับการหมุน Gradient */
 @keyframes rotateGradient {
-    0% {
-        transform: rotate(0deg); 
-    }
-    100% {
-        transform: rotate(360deg); /* หมุนครบ 1 รอบ */
-    }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
+/* ปรับสี Gradient ให้ดูสดใสขึ้น */
+svg defs linearGradient stop:nth-child(1) { stop-color: #4CAF50; } /* เขียว */
+svg defs linearGradient stop:nth-child(2) { stop-color: #8BC34A; } /* เขียวอ่อน */
+svg defs linearGradient stop:nth-child(3) { stop-color: #4CAF50; } /* เขียว */
 
 .time-display {
+    font-family: 'Montserrat', sans-serif;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 2.2em;
-    font-weight: bold;
-    color: #333;
+    font-size: 2.2em; /* ขนาดฟอนต์ */
+    font-weight: 600;
+    color: var(--text-color-dark);
+    letter-spacing: -1px; /* ปรับระยะห่างตัวอักษร */
 }
-/* ... โค้ดส่วนล่างอื่นๆ เหมือนเดิม ... */
+
+/* ==================================== */
+/* สไตล์ปุ่มควบคุม */
+/* ==================================== */
+.stopwatch-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 25px;
+    gap: 15px; /* ระยะห่างระหว่างปุ่ม */
+}
+
+.control-btn {
+    border-radius: 50%;
+    width: 55px; /* ขนาดเล็กลงเล็กน้อย */
+    height: 55px;
+    font-size: 1.3em;
+    color: var(--text-color-light);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: var(--shadow-light); /* เพิ่มเงาให้ปุ่ม */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.start-btn {
+    background-color: var(--primary-color); /* ใช้สีเขียว */
+    width: 75px; /* ปุ่มใหญ่ขึ้น */
+    height: 75px;
+    font-size: 2em;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4); /* เงาปุ่มเริ่ม */
+}
+.start-btn.running { /* สไตล์เมื่อนาฬิกากำลังทำงาน (เป็นปุ่มหยุด) */
+    background-color: #F44336; /* สีแดง */
+    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+}
+
+.reset-btn { background-color: #9E9E9E; } /* เทา */
+.lap-btn { background-color: var(--secondary-color); } /* น้ำเงิน */
+
+.control-btn:hover {
+    transform: translateY(-2px); /* ยกขึ้นเล็กน้อยเมื่อโฮเวอร์ */
+    box-shadow: var(--shadow-deep);
+}
+.control-btn:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-light);
+}
+.control-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* ==================================== */
+/* สไตล์ตาราง Lap Time (ปรับปรุง) */
+/* ==================================== */
+#lap-times {
+    width: 90%;
+    margin: 25px auto 0;
+    border-radius: 10px;
+    overflow: hidden; /* เพื่อให้ border-radius ทำงานกับแถวแรก/สุดท้าย */
+    background-color: #fcfcfc;
+}
+
+.lap-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: #e0e0e0;
+    font-weight: 600;
+    color: #555;
+    border-bottom: 1px solid #ddd;
+    font-size: 0.9em;
+}
+.lap-header div {
+    width: 33%;
+    text-align: center;
+}
+
+
+.lap-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 1em;
+    transition: background-color 0.2s ease;
+}
+
+.lap-row:nth-child(odd) { /* สลับสีพื้นหลัง */
+    background-color: #f9f9f9;
+}
+.lap-row:hover {
+    background-color: #eef7fa;
+}
+
+.lap-row .lap-index {
+    font-weight: bold;
+    width: 33%;
+    text-align: left;
+    color: #888;
+}
+.lap-row .lap-duration,
+.lap-row .total-time {
+    width: 33%;
+    text-align: right;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    color: var(--text-color-dark);
+}
+
+.lap-row:last-child {
+    border-bottom: none;
+}
+
+/* ==================================== */
+/* สไตล์ผลลัพธ์ (ปรับปรุง) */
+/* ==================================== */
+.calculate-btn {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-top: 25px;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: var(--shadow-light);
+}
+
+.calculate-btn:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-deep);
+}
+.calculate-btn:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-light);
+}
+
+.results {
+    margin-top: 35px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    background-color: #fcfdff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#avg-time {
+    font-size: 1.1em;
+    font-weight: 400;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+#productivity {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.6em;
+    color: var(--primary-color);
+    font-weight: 600;
+}
