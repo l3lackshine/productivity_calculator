@@ -14,18 +14,27 @@
             <h2>⏱️ นาฬิกาจับเวลา</h2>
             
             <div class="circular-progress">
-                <svg viewBox="0 0 100 100">
+                <svg viewBox="0 0 100 100" id="stopwatch-svg">
                     <defs>
+                        <filter id="liquid-effect">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" />
+                            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0 
+                                                                             0 1 0 0 0 
+                                                                             0 0 1 0 0 
+                                                                             0 0 0 15 -7" result="goo" />
+                        </filter>
+
                         <linearGradient id="liquid-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#007bff;stop-opacity:1" />
-                            <stop offset="50%" style="stop-color:#4faaff;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#007bff;stop-opacity:1" />
+                            <stop offset="0%" style="stop-color:#d9534f;stop-opacity:1" /> <stop offset="50%" style="stop-color:#f0ad4e;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#d9534f;stop-opacity:1" />
                         </linearGradient>
                     </defs>
                     
                     <circle class="bg" cx="50" cy="50" r="45"></circle>
-                    <circle class="progress" cx="50" cy="50" r="45" id="progress-circle"></circle>
+                    
+                    <circle class="progress" cx="50" cy="50" r="45" id="progress-circle" filter="url(#liquid-effect)"></circle>
                 </svg>
+                
                 <div id="display" class="time-display">00:00.00</div>
             </div>
             

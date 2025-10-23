@@ -18,18 +18,7 @@ body {
     max-width: 450px;
     text-align: center;
 }
-
-h1 {
-    color: #007bff;
-    margin-bottom: 20px;
-}
-
-hr {
-    border: 0;
-    height: 1px;
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0));
-    margin: 25px 0;
-}
+/* ... โค้ดส่วนบนอื่นๆ เหมือนเดิม ... */
 
 /* ==================================== */
 /* สไตล์นาฬิกาแบบวงแหวน */
@@ -45,57 +34,41 @@ hr {
     margin: 20px auto;
 }
 
-/* เพิ่ม SVG เพื่อกำหนด Gradient */
 .circular-progress svg {
     width: 100%;
     height: 100%;
-    transform: rotate(-90deg);
+    /* ไม่ต้อง rotate ที่นี่แล้ว เราจะใช้แอนิเมชันหมุนแทน */
 }
 
 .circular-progress circle {
     fill: none;
-    stroke-width: 8;
+    stroke-width: 12; /* เพิ่มความหนาของเส้นเพื่อให้เอฟเฟกต์ของเหลวเห็นชัด */
 }
 
 .circular-progress .bg {
     stroke: #eee;
 }
 
-/* สร้าง Gradient และ Animation */
 .circular-progress .progress {
-    /* กำหนด stroke เป็น URL ของ gradient */
+    /* ใช้ Gradient ที่ประกาศใน HTML */
     stroke: url(#liquid-gradient); 
     stroke-dasharray: 283; 
     stroke-dashoffset: 283;
     transition: stroke-dashoffset 0.1s linear;
-    stroke-linecap: round;
+    stroke-linecap: round; /* ทำให้ปลายเส้นมน */
+
+    /* แอนิเมชันสำหรับหมุน Gradient อย่างต่อเนื่อง */
+    animation: rotateGradient 1s linear infinite; 
+    transform-origin: 50% 50%;
 }
 
-/* ==================================== */
-/* เพิ่ม SVG Definitions สำหรับ Gradient และ Animation */
-/* ==================================== */
-svg defs {
-    position: absolute;
-    width: 0;
-    height: 0;
-    overflow: hidden;
-}
-
-/* กำหนด Linear Gradient */
-.circular-progress defs linearGradient {
-    animation: liquid-flow 2s linear infinite; /* แอนิเมชันการไหลของ gradient */
-}
-
-/* Keyframes สำหรับการเคลื่อนที่ของ Gradient */
-@keyframes liquid-flow {
+/* Keyframes สำหรับการหมุน Gradient ให้ดูเหมือนไหลเร็วกว่าเดิม */
+@keyframes rotateGradient {
     0% {
-        x1: 0%; y1: 0%; x2: 100%; y2: 0%; /* เริ่มต้น */
-    }
-    50% {
-        x1: 100%; y1: 0%; x2: 0%; y2: 0%; /* เลื่อนไปอีกฝั่ง */
+        transform: rotate(0deg); 
     }
     100% {
-        x1: 0%; y1: 0%; x2: 100%; y2: 0%; /* กลับมาที่เดิม */
+        transform: rotate(360deg); /* หมุนครบ 1 รอบ */
     }
 }
 
@@ -109,95 +82,4 @@ svg defs {
     font-weight: bold;
     color: #333;
 }
-
-/* ==================================== */
-/* สไตล์ปุ่มควบคุม (เหมือนเดิม) */
-/* ==================================== */
-.stopwatch-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 30px;
-    gap: 15px;
-}
-
-.control-btn {
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    font-size: 20px;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.start-btn {
-    background-color: #007bff;
-    width: 80px;
-    height: 80px;
-    font-size: 30px;
-}
-
-.start-btn:hover { background-color: #0056b3; }
-.reset-btn { background-color: #6c757d; }
-.lap-btn { background-color: #28a745; }
-
-.reset-btn:hover { background-color: #5a6268; }
-.lap-btn:hover { background-color: #1e7e34; }
-
-/* ==================================== */
-/* สไตล์ตาราง Lap Time (เหมือนเดิม) */
-/* ==================================== */
-#lap-times {
-    width: 80%;
-    margin: 20px auto 0;
-}
-
-.lap-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-    font-size: 1.1em;
-}
-
-.lap-row .lap-index {
-    font-weight: bold;
-    width: 10%;
-    text-align: left;
-    color: #999;
-}
-.lap-row .lap-value {
-    width: 45%;
-    text-align: right;
-    font-weight: bold;
-    color: #333;
-}
-
-.lap-row:last-child {
-    border-bottom: none;
-}
-
-/* สไตล์ผลลัพธ์เดิม */
-.calculate-btn {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    width: 100%;
-}
-
-.results {
-    margin-top: 30px;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #e9ecef;
-}
-
-#productivity {
-    font-size: 1.3em;
-    color: #007bff;
-    font-weight: bold;
-}
+/* ... โค้ดส่วนล่างอื่นๆ เหมือนเดิม ... */
