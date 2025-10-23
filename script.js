@@ -60,6 +60,66 @@ function lapTime() {
     const lapTimeSeconds = (updatedTime - startTime) / 1000;
 
     if (lapCounter === 1) {
+        // บันทึกเวลาที่ 1 โดยไม่มี alert
+        document.getElementById('time1').value = lapTimeSeconds.toFixed(2);
+        lapCounter++;
+        
+        // รีเซ็ตนาฬิกาเพื่อเริ่มจับเวลาชิ้นงานถัดไป
+        clearInterval(tInterval);
+        startTime = new Date().getTime(); // ตั้งค่าเวลาเริ่มต้นใหม่ทันที
+        tInterval = setInterval(getShowTime, 10);
+        
+    } else if (lapCounter === 2) {
+        // บันทึกเวลาที่ 2 โดยไม่มี alert
+        document.getElementById('time2').value = lapTimeSeconds.toFixed(2);
+        lapCounter++;
+        
+        // รีเซ็ตนาฬิกาเพื่อเริ่มจับเวลาชิ้นงานถัดไป
+        clearInterval(tInterval);
+        startTime = new Date().getTime(); // ตั้งค่าเวลาเริ่มต้นใหม่ทันที
+        tInterval = setInterval(getShowTime, 10);
+        
+    } else if (lapCounter === 3) {
+        // บันทึกเวลาที่ 3
+        document.getElementById('time3').value = lapTimeSeconds.toFixed(2);
+        
+        // หยุดนาฬิกาและรีเซ็ตทั้งหมดเมื่อครบ 3 ครั้ง
+        clearInterval(tInterval);
+        running = false;
+        startBtn.innerHTML = "เริ่มใหม่";
+        startBtn.style.backgroundColor = '#5cb85c'; // สีเขียว
+        lapBtn.disabled = true;
+        display.innerHTML = "0.00";
+        lapCounter = 1; // รีเซ็ตตัวนับ
+        
+        // คำนวณผลผลิตอัตโนมัติ
+        calculate
+function getShowTime() {
+    updatedTime = new Date().getTime();
+    let difference = updatedTime - startTime;
+
+    // คำนวณเวลา (เฉพาะวินาทีและมิลลิวินาที)
+    let seconds = Math.floor((difference % (1000 * 60)) / 1000);
+    let milliseconds = Math.floor((difference % 1000) / 10);
+
+    display.innerHTML = 
+        (seconds < 10 ? "0" + seconds : seconds) + "." + 
+        (milliseconds < 10 ? "0" + milliseconds : milliseconds);
+}
+
+/**
+ * ฟังก์ชันบันทึกเวลาและรีเซ็ตนาฬิกา
+ */
+function lapTime() {
+    if (!running) {
+        alert("กรุณา 'เริ่ม' หรือ 'ทำงานต่อ' นาฬิกาจับเวลาก่อน");
+        return;
+    }
+    
+    // เวลาที่จับได้ (เป็นวินาทีที่มีทศนิยม)
+    const lapTimeSeconds = (updatedTime - startTime) / 1000;
+
+    if (lapCounter === 1) {
         document.getElementById('time1').value = lapTimeSeconds.toFixed(2);
         lapCounter++;
         alert(`บันทึกเวลาที่ 1: ${lapTimeSeconds.toFixed(2)} วินาที`);
