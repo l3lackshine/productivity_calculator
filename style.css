@@ -45,10 +45,11 @@ hr {
     margin: 20px auto;
 }
 
+/* เพิ่ม SVG เพื่อกำหนด Gradient */
 .circular-progress svg {
     width: 100%;
     height: 100%;
-    transform: rotate(-90deg); /* เริ่มที่ด้านบน */
+    transform: rotate(-90deg);
 }
 
 .circular-progress circle {
@@ -60,13 +61,44 @@ hr {
     stroke: #eee;
 }
 
+/* สร้าง Gradient และ Animation */
 .circular-progress .progress {
-    stroke: #007bff;
-    stroke-dasharray: 283; /* 2 * PI * r (2 * 3.14 * 45 ≈ 282.7) */
-    stroke-dashoffset: 283; /* เริ่มต้นที่เต็มวง */
+    /* กำหนด stroke เป็น URL ของ gradient */
+    stroke: url(#liquid-gradient); 
+    stroke-dasharray: 283; 
+    stroke-dashoffset: 283;
     transition: stroke-dashoffset 0.1s linear;
     stroke-linecap: round;
 }
+
+/* ==================================== */
+/* เพิ่ม SVG Definitions สำหรับ Gradient และ Animation */
+/* ==================================== */
+svg defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+/* กำหนด Linear Gradient */
+.circular-progress defs linearGradient {
+    animation: liquid-flow 2s linear infinite; /* แอนิเมชันการไหลของ gradient */
+}
+
+/* Keyframes สำหรับการเคลื่อนที่ของ Gradient */
+@keyframes liquid-flow {
+    0% {
+        x1: 0%; y1: 0%; x2: 100%; y2: 0%; /* เริ่มต้น */
+    }
+    50% {
+        x1: 100%; y1: 0%; x2: 0%; y2: 0%; /* เลื่อนไปอีกฝั่ง */
+    }
+    100% {
+        x1: 0%; y1: 0%; x2: 100%; y2: 0%; /* กลับมาที่เดิม */
+    }
+}
+
 
 .time-display {
     position: absolute;
@@ -79,7 +111,7 @@ hr {
 }
 
 /* ==================================== */
-/* สไตล์ปุ่มควบคุม */
+/* สไตล์ปุ่มควบคุม (เหมือนเดิม) */
 /* ==================================== */
 .stopwatch-controls {
     display: flex;
@@ -115,7 +147,7 @@ hr {
 .lap-btn:hover { background-color: #1e7e34; }
 
 /* ==================================== */
-/* สไตล์ตาราง Lap Time (ใหม่) */
+/* สไตล์ตาราง Lap Time (เหมือนเดิม) */
 /* ==================================== */
 #lap-times {
     width: 80%;
