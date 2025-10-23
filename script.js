@@ -52,6 +52,95 @@ function getShowTime() {
  */
 function lapTime() {
     if (!running) {
+        // ** (คง alert นี้ไว้เพื่อแจ้งเตือนให้เริ่มจับเวลาก่อน) **
+        alert("กรุณา 'เริ่ม' หรือ 'ทำงานต่อ' นาฬิกาจับเวลาก่อน");
+        return;
+    }
+    
+    // เวลาที่จับได้ (เป็นวินาทีที่มีทศนิยม)
+    const lapTimeSeconds = (updatedTime - startTime) / 1000;
+
+    if (lapCounter === 1) {
+        // บันทึกเวลาที่ 1 ** (ไม่มี alert) **
+        document.getElementById('time1').value = lapTimeSeconds.toFixed(2);
+        lapCounter++;
+        
+        // รีเซ็ตนาฬิกาเพื่อเริ่มจับเวลาชิ้นงานถัดไป
+        clearInterval(tInterval);
+        startTime = new Date().getTime(); 
+        tInterval = setInterval(getShowTime, 10);
+        
+    } else if (lapCounter === 2) {
+        // บันทึกเวลาที่ 2 ** (ไม่มี alert) **
+        document.getElementById('time2').value = lapTimeSeconds.toFixed(2);
+        lapCounter++;
+        
+        // รีเซ็ตนาฬิกาเพื่อเริ่มจับเวลาชิ้นงานถัดไป
+        clearInterval(tInterval);
+        startTime = new Date().getTime(); 
+        tInterval = setInterval(getShowTime, 10);
+        
+    } else if (lapCounter === 3) {
+        // บันทึกเวลาที่ 3
+        document.getElementById('time3').value = lapTimeSeconds.toFixed(2);
+        
+        // หยุดนาฬิกาและรีเซ็ตทั้งหมดเมื่อครบ 3 ครั้ง
+        clearInterval(tInterval);
+        running = false;
+        startBtn.innerHTML = "เริ่มใหม่";
+        startBtn.style.backgroundColor = '#5cb85c'; 
+        lapBtn.disabled = true;
+        display.innerHTML = "0.00";
+        lapCounter = 1; 
+        
+        // คำนวณผลผลิตอัตโนมัติ
+        calculateProductivity();
+        
+        return;
+    }
+    
+}
+
+
+// ** ฟังก์ชันคำนวณผลผลิต **
+function calculateProductivity() {
+    const time1 = parseFloat(document.getElementById('time1').value);
+    const time2 = parseFloat(document.getElementById('time2').value);
+    const time3 = parseFloat(document.getElementById('time3').value);
+
+    if (isNaN(time1) || isNaN(time2) || isNaN(time3) || time1 <= 0 || time2 <= 0 || time3 <= 0) {
+        // ** (คง alert นี้ไว้เพื่อแจ้งเตือนเมื่อข้อมูลการคำนวณไม่สมบูรณ์) **
+        alert("กรุณาป้อนเวลาที่เป็นตัวเลขบวกที่ถูกต้องครบทั้ง 3 ช่อง ก่อนคำนวณ");
+        document.getElementById('avg-time').textContent = "เวลาเฉลี่ย: - วินาทีต่อชิ้น";
+        document.getElementById('productivity').textContent = "ผลผลิตต่อชั่วโมง: - ชิ้น";
+        return;
+    }
+
+    const averageTime = (time1 + time2 + time3) / 3;
+    const SECONDS_PER_HOUR = 3600;
+    const productivityPerHour = SECONDS_PER_HOUR / averageTime;
+
+    document.getElementById('avg-time').textContent = `เวลาเฉลี่ย: ${averageTime.toFixed(2)} วินาทีต่อชิ้น`;
+    document.getElementById('productivity').textContent = `ผลผลิตต่อชั่วโมง: ${productivityPerHour.toFixed(2)} ชิ้น`;
+}
+function getShowTime() {
+    updatedTime = new Date().getTime();
+    let difference = updatedTime - startTime;
+
+    // คำนวณเวลา (เฉพาะวินาทีและมิลลิวินาที)
+    let seconds = Math.floor((difference % (1000 * 60)) / 1000);
+    let milliseconds = Math.floor((difference % 1000) / 10);
+
+    display.innerHTML = 
+        (seconds < 10 ? "0" + seconds : seconds) + "." + 
+        (milliseconds < 10 ? "0" + milliseconds : milliseconds);
+}
+
+/**
+ * ฟังก์ชันบันทึกเวลาและรีเซ็ตนาฬิกา
+ */
+function lapTime() {
+    if (!running) {
         alert("กรุณา 'เริ่ม' หรือ 'ทำงานต่อ' นาฬิกาจับเวลาก่อน");
         return;
     }
