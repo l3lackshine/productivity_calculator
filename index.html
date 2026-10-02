@@ -1,72 +1,289 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เครื่องคิดเลขผลผลิตต่อชั่วโมง</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111f">
+<title>คำนวณผลผลิตต่อชั่วโมง</title>
+<style>
+:root{
+  --bg:#07111f;--panel:#0d1a2c;--panel2:#10233b;--line:#294361;
+  --text:#f4f8ff;--muted:#a9bdd6;--green:#35d36b;--blue:#3185ff;
+  --orange:#ffad3d;--cyan:#69b8ff;--purple:#6157ff;--shadow:0 18px 50px #0008;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;color:var(--text)}
+body{
+  background:
+    radial-gradient(circle at 50% -10%,#17365a 0,#0a1626 35%,#050c16 78%);
+  padding:14px 12px 30px;
+}
+.app{width:min(980px,100%);margin:auto}
+header{
+  display:flex;align-items:center;gap:12px;padding:8px 4px 18px;
+  border-bottom:1px solid #25405f;
+}
+.logo{font-size:43px;line-height:1;filter:drop-shadow(0 4px 8px #0007)}
+h1{font-size:clamp(25px,6vw,40px);margin:0;font-weight:850;letter-spacing:-.5px}
+.sub{color:#9eb4cf;margin-top:3px;font-size:clamp(12px,3vw,16px)}
+.grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:16px}
+.card{
+  background:linear-gradient(145deg,#0e1b2d,#091522);
+  border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.card-title{
+  padding:16px 18px;border-bottom:1px solid #223a55;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  font-size:18px;font-weight:800;
+}
+.count{color:#9bb6d8;font-size:15px}
+.stopwatch-area{padding:14px 14px 18px;display:flex;justify-content:center}
+.watch{
+  position:relative;width:min(78vw,360px);aspect-ratio:1;border-radius:50%;
+  padding:10px;
+  background:linear-gradient(145deg,#eef4f7 0,#737b82 18%,#252a2e 20%,#bfc7ca 49%,#4e555b 80%,#e9edef 100%);
+  box-shadow:inset 0 0 0 2px #fff8,0 12px 35px #000b;
+}
+.watch:before{
+  content:"";position:absolute;inset:8px;border-radius:50%;
+  background:radial-gradient(circle,#18212a 0,#090f15 65%,#02060a 100%);
+  box-shadow:inset 0 0 0 5px #59636a,inset 0 0 0 8px #111;
+}
+.face{position:absolute;inset:24px;border-radius:50%}
+.tick{
+  position:absolute;left:50%;top:50%;width:2px;height:48%;
+  transform-origin:50% 100%;background:transparent;
+}
+.tick i{display:block;width:2px;height:9px;background:#cbd5dc;border-radius:2px;margin:auto}
+.tick.big i{width:3px;height:14px;background:#fff}
+.num{position:absolute;inset:0;text-align:center;font-weight:750;font-size:15px;color:#eef4f8}
+.num span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.n60{transform:translateY(-43%)}.n5{transform:translate(125px,-42px)}.n10{transform:translate(108px,-2px)}
+.n15{transform:translate(101px,48px)}.n20{transform:translate(77px,88px)}.n25{transform:translate(32px,115px)}
+.n30{transform:translate(-50%,125px)}.n35{transform:translate(-113px,115px)}.n40{transform:translate(-156px,88px)}
+.n45{transform:translate(-178px,48px)}.n50{transform:translate(-183px,-2px)}.n55{transform:translate(-158px,-42px)}
+.needle{
+  position:absolute;left:50%;top:13%;width:3px;height:37%;
+  transform:translateX(-50%);transform-origin:50% 100%;background:#ff2525;
+  border-radius:4px;z-index:4;transition:transform .08s linear;
+}
+.needle:after{
+  content:"";position:absolute;bottom:-7px;left:50%;width:16px;height:16px;
+  transform:translateX(-50%);border-radius:50%;background:#111d28;border:3px solid #ef3737;
+  box-shadow:0 0 0 2px #c7d0d5;
+}
+.digital{
+  position:absolute;left:50%;top:57%;transform:translate(-50%,-50%);
+  background:#050b11;border:1px solid #2d465f;border-radius:13px;
+  padding:8px 13px;min-width:150px;text-align:center;
+  font:700 28px/1.1 ui-monospace,SFMono-Regular,monospace;color:#d9e5ee;
+  box-shadow:0 5px 15px #0009;z-index:3
+}
+.crown{position:absolute;top:-16px;left:50%;transform:translateX(-50%);width:48px;height:27px;border-radius:8px 8px 12px 12px;background:linear-gradient(#dfe5e7,#555d63);z-index:5}
+.pusher{position:absolute;top:35px;width:47px;height:25px;border-radius:8px;background:linear-gradient(#e5eaec,#555d63);z-index:5}
+.pusher.left{left:-25px;transform:rotate(-40deg)}.pusher.right{right:-25px;transform:rotate(40deg)}
+.controls{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:10px;padding:0 14px 18px}
+button{
+  min-height:56px;border:0;border-radius:18px;color:#fff;font-size:16px;font-weight:850;
+  box-shadow:inset 0 1px #fff3,0 7px 18px #0005;touch-action:manipulation
+}
+button:active{transform:scale(.97)}
+.reset{background:#2a4260}.start{background:linear-gradient(135deg,#31d96d,#20bb59)}
+.record{background:linear-gradient(135deg,#348eff,#1969d7)}.stop{background:#e88c22}
+button:disabled{opacity:.4;filter:saturate(.4)}
+.records{padding:0 14px 16px;display:grid;gap:0}
+.record-row{
+  display:grid;grid-template-columns:45px 1fr 34px;align-items:center;gap:10px;
+  padding:13px 2px;border-top:1px solid #253d58
+}
+.badge{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:900;color:#07111f}
+.b1{background:#3aa7ff}.b2{background:#45dc76}.b3{background:#ffb347}
+.record-time{font:700 22px ui-monospace,SFMono-Regular,monospace}
+.del{min-height:36px;background:none;box-shadow:none;font-size:20px;padding:0}
+.input-card{padding:16px}
+.section-title{font-size:21px;font-weight:850;margin-bottom:4px}
+.hint{color:var(--muted);font-size:13px;margin-bottom:14px}
+.inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.field label{display:block;color:#c5d4e6;font-size:12px;margin:0 0 6px}
+input{
+  width:100%;background:#07111f;color:#fff;border:1px solid #3c5774;border-radius:12px;
+  padding:13px 8px;font-size:19px;text-align:center;outline:0
+}
+input:focus{border-color:#62a8ff;box-shadow:0 0 0 3px #3185ff22}
+.calc{
+  width:100%;margin-top:14px;background:linear-gradient(135deg,#665cff,#4c4eea);
+  font-size:18px;min-height:60px
+}
+.result-card{padding:16px;border-color:#159b8c}
+.result-title{font-size:20px;font-weight:850;border-bottom:1px solid #24564f;padding-bottom:12px}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding-top:15px}
+.metric{padding:5px 4px}.metric small{display:block;color:#b7c8d8;font-size:14px;margin-bottom:6px}
+.metric strong{font-size:clamp(32px,9vw,48px);line-height:1;color:#42e978}
+.metric:nth-child(2) strong{color:#58a9ff}
+.metric span{font-size:14px;color:#b7c8d8}
+.tip{margin-top:15px;padding:12px 14px;border-radius:13px;background:#102b48;color:#d6e5f6;font-size:13px}
+@media(min-width:760px){
+  .grid{grid-template-columns:1.1fr .9fr}.card:first-child{grid-row:span 2}
+  .input-card{height:max-content}.result-card{height:max-content}
+}
+@media(max-width:390px){
+  body{padding:10px 8px 25px}.controls{gap:7px;padding-left:10px;padding-right:10px}
+  button{font-size:14px}.inputs{gap:7px}.digital{min-width:136px;font-size:24px}
+  .n5,.n10,.n15,.n20,.n25,.n35,.n40,.n45,.n50,.n55{display:none}
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>คำนวณผลผลิตต่อชั่วโมง</h1>
-        
-        <div id="stopwatch-section">
-            <h2>⏱️ นาฬิกาจับเวลา</h2>
-            
-            <div class="circular-progress">
-                <svg viewBox="0 0 100 100" id="stopwatch-svg">
-                    <defs>
-                        <filter id="liquid-effect">
-                            <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" />
-                            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0 
-                                                                             0 1 0 0 0 
-                                                                             0 0 1 0 0 
-                                                                             0 0 0 15 -7" result="goo" />
-                        </filter>
+<div class="app">
+<header>
+  <div class="logo">⏱️</div>
+  <div>
+    <h1>คำนวณผลผลิตต่อชั่วโมง</h1>
+    <div class="sub">จับเวลา • บันทึก • คำนวณ • เพิ่มประสิทธิภาพ</div>
+  </div>
+</header>
 
-                        <linearGradient id="liquid-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" /> 
-                            <stop offset="50%" style="stop-color:#8BC34A;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#4CAF50;stop-opacity:1" />
-                        </linearGradient>
-                    </defs>
-                    
-                    <circle class="bg" cx="50" cy="50" r="45"></circle>
-                    
-                    <circle class="progress" cx="50" cy="50" r="45" id="progress-circle" filter="url(#liquid-effect)"></circle>
-                </svg>
-                
-                <div id="display" class="time-display">00:00.00</div>
-            </div>
-            
-            <div id="lap-times">
-                </div>
-            
-            <div class="stopwatch-controls">
-                <button id="reset-btn" disabled class="control-btn reset-btn">↺</button>
-                <button id="start-btn" class="control-btn start-btn">▶</button>
-                <button id="lap-btn" disabled class="control-btn lap-btn">บันทึก</button>
-            </div>
-        </div>
-        
-        <hr>
-        
-        <div id="productivity-inputs">
-             <p>เวลา (วินาที) ที่บันทึก:</p>
-            <input type="hidden" id="time1">
-            <input type="hidden" id="time2">
-            <input type="hidden" id="time3">
-        </div>
-
-        <button type="button" class="calculate-btn" id="calculate-btn">คำนวณผลผลิต</button>
-
-        <div id="results" class="results">
-            <h2>ผลลัพธ์</h2>
-            <p id="avg-time">เวลาเฉลี่ย: - วินาทีต่อชิ้น</p>
-            <p id="productivity">ผลผลิตต่อชั่วโมง: - ชิ้น</p>
-        </div>
+<div class="grid">
+<section class="card">
+  <div class="card-title"><span>⏱️ นาฬิกาจับเวลา</span><span id="count" class="count">0/3</span></div>
+  <div class="stopwatch-area">
+    <div class="watch">
+      <div class="crown"></div><div class="pusher left"></div><div class="pusher right"></div>
+      <div class="face" id="face">
+        <div class="tick big" style="transform:rotate(0deg)"></div><div class="tick" style="transform:rotate(6deg)"></div>
+        <div class="tick" style="transform:rotate(12deg)"></div><div class="tick" style="transform:rotate(18deg)"></div>
+        <div class="tick" style="transform:rotate(24deg)"></div><div class="tick big" style="transform:rotate(30deg)"></div>
+        <div class="tick" style="transform:rotate(36deg)"></div><div class="tick" style="transform:rotate(42deg)"></div>
+        <div class="tick" style="transform:rotate(48deg)"></div><div class="tick" style="transform:rotate(54deg)"></div>
+        <div class="tick big" style="transform:rotate(60deg)"></div><div class="tick" style="transform:rotate(66deg)"></div>
+        <div class="tick" style="transform:rotate(72deg)"></div><div class="tick" style="transform:rotate(78deg)"></div>
+        <div class="tick" style="transform:rotate(84deg)"></div><div class="tick big" style="transform:rotate(90deg)"></div>
+        <div class="tick" style="transform:rotate(96deg)"></div><div class="tick" style="transform:rotate(102deg)"></div>
+        <div class="tick" style="transform:rotate(108deg)"></div><div class="tick" style="transform:rotate(114deg)"></div>
+        <div class="tick big" style="transform:rotate(120deg)"></div><div class="tick" style="transform:rotate(126deg)"></div>
+        <div class="tick" style="transform:rotate(132deg)"></div><div class="tick" style="transform:rotate(138deg)"></div>
+        <div class="tick" style="transform:rotate(144deg)"></div><div class="tick big" style="transform:rotate(150deg)"></div>
+        <div class="tick" style="transform:rotate(156deg)"></div><div class="tick" style="transform:rotate(162deg)"></div>
+        <div class="tick" style="transform:rotate(168deg)"></div><div class="tick" style="transform:rotate(174deg)"></div>
+        <div class="tick big" style="transform:rotate(180deg)"></div><div class="tick" style="transform:rotate(186deg)"></div>
+        <div class="tick" style="transform:rotate(192deg)"></div><div class="tick" style="transform:rotate(198deg)"></div>
+        <div class="tick" style="transform:rotate(204deg)"></div><div class="tick big" style="transform:rotate(210deg)"></div>
+        <div class="tick" style="transform:rotate(216deg)"></div><div class="tick" style="transform:rotate(222deg)"></div>
+        <div class="tick" style="transform:rotate(228deg)"></div><div class="tick" style="transform:rotate(234deg)"></div>
+        <div class="tick big" style="transform:rotate(240deg)"></div><div class="tick" style="transform:rotate(246deg)"></div>
+        <div class="tick" style="transform:rotate(252deg)"></div><div class="tick" style="transform:rotate(258deg)"></div>
+        <div class="tick" style="transform:rotate(264deg)"></div><div class="tick big" style="transform:rotate(270deg)"></div>
+        <div class="tick" style="transform:rotate(276deg)"></div><div class="tick" style="transform:rotate(282deg)"></div>
+        <div class="tick" style="transform:rotate(288deg)"></div><div class="tick" style="transform:rotate(294deg)"></div>
+        <div class="tick big" style="transform:rotate(300deg)"></div><div class="tick" style="transform:rotate(306deg)"></div>
+        <div class="tick" style="transform:rotate(312deg)"></div><div class="tick" style="transform:rotate(318deg)"></div>
+        <div class="tick" style="transform:rotate(324deg)"></div><div class="tick big" style="transform:rotate(330deg)"></div>
+        <div class="tick" style="transform:rotate(336deg)"></div><div class="tick" style="transform:rotate(342deg)"></div>
+        <div class="tick" style="transform:rotate(348deg)"></div>
+        <div class="num"><span class="n60">60</span><span class="n5">5</span><span class="n10">10</span><span class="n15">15</span><span class="n20">20</span><span class="n25">25</span><span class="n30">30</span><span class="n35">35</span><span class="n40">40</span><span class="n45">45</span><span class="n50">50</span><span class="n55">55</span></div>
+        <div id="needle" class="needle"></div>
+        <div id="digital" class="digital">00:00.00</div>
+      </div>
     </div>
+  </div>
+  <div class="controls">
+    <button id="reset" class="reset">↻ รีเซ็ต</button>
+    <button id="start" class="start">▶ เริ่ม</button>
+    <button id="record" class="record" disabled>▣ บันทึก</button>
+  </div>
+  <div id="records" class="records"></div>
+</section>
 
-    <script src="script.js"></script>
+<section class="card input-card">
+  <div class="section-title">🧮 เวลา (วินาที) ที่บันทึก</div>
+  <div class="hint">สามารถแก้ไขได้หากต้องการ</div>
+  <div class="inputs">
+    <div class="field"><label>ชิ้นที่ 1</label><input id="t1" type="number" step="0.01" min="0" inputmode="decimal"></div>
+    <div class="field"><label>ชิ้นที่ 2</label><input id="t2" type="number" step="0.01" min="0" inputmode="decimal"></div>
+    <div class="field"><label>ชิ้นที่ 3</label><input id="t3" type="number" step="0.01" min="0" inputmode="decimal"></div>
+  </div>
+  <button id="calc" class="calc">▣ คำนวณผลผลิต</button>
+</section>
+
+<section class="card result-card">
+  <div class="result-title">📊 ผลลัพธ์</div>
+  <div class="result-grid">
+    <div class="metric"><small>◷ เวลาเฉลี่ยต่อชิ้น</small><strong id="avg">—</strong><span> วินาที/ชิ้น</span></div>
+    <div class="metric"><small>◈ ผลผลิตต่อชั่วโมง</small><strong id="hour">—</strong><span> ชิ้น/ชั่วโมง</span></div>
+  </div>
+  <div class="tip">💡 เคล็ดลับ: จับเวลาแต่ละชิ้นแล้วกด “บันทึก” เพื่อเริ่มจับเวลาชิ้นถัดไปทันที</div>
+</section>
+</div>
+</div>
+
+<script>
+(() => {
+  const $=id=>document.getElementById(id);
+  const start=$("start"), reset=$("reset"), record=$("record"), digital=$("digital"), needle=$("needle");
+  const records=$("records"), count=$("count"), inputs=[$("t1"),$("t2"),$("t3")];
+  let running=false, startAt=0, elapsed=0, raf=0, samples=[];
+
+  function format(ms){
+    const min=Math.floor(ms/60000), sec=Math.floor(ms/1000)%60, cs=Math.floor((ms%1000)/10);
+    return String(min).padStart(2,"0")+":"+String(sec).padStart(2,"0")+"."+String(cs).padStart(2,"0");
+  }
+  function draw(ms){
+    digital.textContent=format(ms);
+    const sec=(ms/1000)%60;
+    needle.style.transform=`translateX(-50%) rotate(${sec*6}deg)`;
+  }
+  function frame(){
+    const ms=performance.now()-startAt;
+    elapsed=ms; draw(ms); if(running) raf=requestAnimationFrame(frame);
+  }
+  function startTimer(){
+    if(running)return;
+    startAt=performance.now()-elapsed; running=true;
+    start.textContent="■ หยุด"; start.className="stop"; record.disabled=false; reset.disabled=false;
+    raf=requestAnimationFrame(frame);
+  }
+  function stopTimer(){
+    if(!running)return;
+    elapsed=performance.now()-startAt; running=false; cancelAnimationFrame(raf);
+    draw(elapsed); start.textContent="▶ เริ่ม"; start.className="start";
+    record.disabled=true;
+  }
+  start.onclick=()=>running?stopTimer():startTimer();
+
+  record.onclick=()=>{
+    if(!running || samples.length>=3)return;
+    const sec=(performance.now()-startAt)/1000;
+    samples.push(sec); inputs[samples.length-1].value=sec.toFixed(2);
+    const row=document.createElement("div"); row.className="record-row";
+    const n=samples.length;
+    row.innerHTML=`<span class="badge b${n}">${n}</span><span class="record-time">${sec.toFixed(2)} วินาที</span><button class="del" aria-label="ลบ">🗑️</button>`;
+    row.querySelector(".del").onclick=()=>{
+      const index=[...records.children].indexOf(row);
+      if(index>=0){samples.splice(index,1);inputs.forEach((x,i)=>x.value=samples[i]??"");row.remove();refresh();}
+    };
+    records.appendChild(row);
+    refresh();
+    // สำคัญ: บันทึกแล้วเริ่มจับชิ้นถัดไปใหม่จากศูนย์ทันที
+    elapsed=0; startAt=performance.now(); draw(0);
+    if(samples.length>=3){record.disabled=true;stopTimer();}
+  };
+  function refresh(){count.textContent=`${samples.length}/3`;}
+  reset.onclick=()=>{
+    running=false;cancelAnimationFrame(raf);elapsed=0;samples=[];
+    draw(0);start.textContent="▶ เริ่ม";start.className="start";record.disabled=true;
+    records.innerHTML="";inputs.forEach(x=>x.value="");refresh();
+    $("avg").textContent="—";$("hour").textContent="—";
+  };
+  $("calc").onclick=()=>{
+    const vals=inputs.map(x=>Number(x.value)).filter(v=>Number.isFinite(v)&&v>0);
+    if(!vals.length){$("avg").textContent="—";$("hour").textContent="—";return}
+    const avg=vals.reduce((a,b)=>a+b,0)/vals.length;
+    $("avg").textContent=avg.toFixed(2);
+    $("hour").textContent=(3600/avg).toFixed(0);
+  };
+  draw(0);refresh();
+})();
+</script>
 </body>
 </html>
