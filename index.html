@@ -133,7 +133,7 @@ input:focus{border-color:#62a8ff;box-shadow:0 0 0 3px #3185ff22}
   .n5,.n10,.n15,.n20,.n25,.n35,.n40,.n45,.n50,.n55{display:none}
 }
 
-/* ใช้ภาพนาฬิกาจริงจากรูปตัวอย่าง และวางตัวจับเวลาทับบนหน้าปัด */
+/* ใช้ภาพนาฬิกาจริงจากรูปตัวอย่าง */
 .watch{
   width:min(82vw,430px);
   aspect-ratio:900/980;
@@ -158,24 +158,35 @@ input:focus{border-color:#62a8ff;box-shadow:0 0 0 3px #3185ff22}
   -webkit-user-drag:none;
   filter:drop-shadow(0 14px 25px #0009);
 }
-.watch .face{
-  position:absolute;
-  inset:0;
-  border-radius:0;
-}
+.watch .face{position:absolute;inset:0;border-radius:0}
 .watch .tick,.watch .num{display:none}
+
+/* ปิดเฉพาะกรอบจอดิจิตอลเดิมในภาพ เพื่อให้ตัวเลขสดของเว็บลอยอยู่บนหน้าปัด */
+.dial-cleaner{
+  position:absolute;
+  left:25.7%;
+  top:56.6%;
+  width:48.6%;
+  height:15.8%;
+  border-radius:18px;
+  background:radial-gradient(ellipse at 50% 50%,#071018 0%,#08121a 58%,rgba(7,16,24,.96) 78%,rgba(7,16,24,0) 100%);
+  z-index:3;
+  pointer-events:none;
+}
+
+/* จุดหมุนอยู่กึ่งกลางหน้าปัด และปลายเข็มอยู่ตรงแนว 60 */
 .live-needle{
   position:absolute;
   left:50%;
-  top:27.5%;
+  top:29.4%;
   width:3px;
-  height:27%;
+  height:28.6%;
   transform-origin:50% 100%;
   transform:translateX(-50%) rotate(0deg);
-  background:#ff2028;
+  background:linear-gradient(to bottom,#ff3138,#e91620);
   border-radius:4px;
-  z-index:4;
-  box-shadow:0 0 2px #600;
+  z-index:5;
+  box-shadow:0 0 2px #600,0 0 5px rgba(255,30,30,.25);
   transition:transform .06s linear;
 }
 .live-needle:after{
@@ -191,28 +202,49 @@ input:focus{border-color:#62a8ff;box-shadow:0 0 0 3px #3185ff22}
   border:3px solid #ed3035;
   box-shadow:0 0 0 2px #c7d0d5;
 }
+
 .live-digital{
   position:absolute;
   left:50%;
-  top:64.5%;
+  top:65.4%;
   transform:translate(-50%,-50%);
-  width:46.5%;
+  width:auto;
   min-width:0;
   padding:0;
   background:transparent;
   border:0;
   box-shadow:none;
-  color:#dce8f2;
+  color:#e7f3fb;
   text-align:center;
-  z-index:5;
+  z-index:6;
   font:700 clamp(18px,5.2vw,31px)/1.1 ui-monospace,SFMono-Regular,Menlo,monospace;
   letter-spacing:-1px;
   white-space:nowrap;
+  text-shadow:0 1px 4px #000,0 0 8px rgba(150,210,255,.18);
 }
 .crown,.pusher{display:none}
 @media(max-width:390px){
   .watch{width:min(88vw,400px)}
   .live-digital{font-size:clamp(17px,6vw,25px)}
+}
+
+
+/* ปุ่มรองรับ assets จากโฟลเดอร์ assets/
+   วางไฟล์ reset.png, start.png และ record.png เพื่อเปลี่ยนไอคอนของปุ่มได้ทันที */
+.asset-button{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  overflow:hidden;
+}
+.button-asset{
+  width:34px;height:34px;object-fit:contain;display:block;
+  flex:0 0 auto;
+  user-select:none;-webkit-user-drag:none;
+}
+.button-label{line-height:1;
+}
+@media(max-width:390px){
+  .button-asset{width:29px;height:29px}
+  .asset-button{gap:8px}
 }
 
 </style>
@@ -234,15 +266,25 @@ input:focus{border-color:#62a8ff;box-shadow:0 0 0 3px #3185ff22}
     <div class="watch">
       <div class="watch-photo-wrap">
         <img class="watch-photo" src="stopwatch_from_example.png" alt="นาฬิกาจับเวลาจากรูปตัวอย่าง">
+        <div class="dial-cleaner" aria-hidden="true"></div>
         <div id="needle" class="live-needle"></div>
         <div id="digital" class="live-digital">00:00.00</div>
       </div>
     </div>
   </div>
   <div class="controls">
-    <button id="reset" class="reset">↻ รีเซ็ต</button>
-    <button id="start" class="start">▶ เริ่ม</button>
-    <button id="record" class="record" disabled>▣ บันทึก</button>
+    <button id="reset" class="reset asset-button" type="button">
+      <img class="button-asset" src="assets/reset.png" alt="" aria-hidden="true" onerror="this.style.display='none'">
+      <span class="button-label">รีเซ็ต</span>
+    </button>
+    <button id="start" class="start asset-button" type="button">
+      <img class="button-asset" src="assets/start.png" alt="" aria-hidden="true" onerror="this.style.display='none'">
+      <span class="button-label">เริ่ม</span>
+    </button>
+    <button id="record" class="record asset-button" type="button" disabled>
+      <img class="button-asset" src="assets/record.png" alt="" aria-hidden="true" onerror="this.style.display='none'">
+      <span class="button-label">บันทึก</span>
+    </button>
   </div>
   <div id="records" class="records"></div>
 </section>
