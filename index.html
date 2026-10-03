@@ -229,8 +229,8 @@ input:focus{border-color:#62a8ff;box-shadow:0 0 0 3px #3185ff22}
 }
 
 
-/* ปุ่มรองรับ assets จากโฟลเดอร์ assets/
-   วางไฟล์ reset.png, start.png และ record.png เพื่อเปลี่ยนไอคอนของปุ่มได้ทันที */
+/* ปุ่มรองรับ assets แบบไฟล์แยกในโฟลเดอร์เดียวกับ index.html
+   วาง reset.png, start.png และ record.png ไว้ข้างๆ index.html */
 .asset-button{
   display:flex;align-items:center;justify-content:center;gap:12px;
   overflow:hidden;
@@ -274,15 +274,15 @@ input:focus{border-color:#62a8ff;box-shadow:0 0 0 3px #3185ff22}
   </div>
   <div class="controls">
     <button id="reset" class="reset asset-button" type="button">
-      <img class="button-asset" src="assets/reset.png" alt="" aria-hidden="true" onerror="this.style.display='none'">
+      <img class="button-asset" src="reset.png" alt="" aria-hidden="true" onerror="this.style.display='none'">
       <span class="button-label">รีเซ็ต</span>
     </button>
     <button id="start" class="start asset-button" type="button">
-      <img class="button-asset" src="assets/start.png" alt="" aria-hidden="true" onerror="this.style.display='none'">
+      <img class="button-asset" src="start.png" alt="" aria-hidden="true" onerror="this.style.display='none'">
       <span class="button-label">เริ่ม</span>
     </button>
     <button id="record" class="record asset-button" type="button" disabled>
-      <img class="button-asset" src="assets/record.png" alt="" aria-hidden="true" onerror="this.style.display='none'">
+      <img class="button-asset" src="record.png" alt="" aria-hidden="true" onerror="this.style.display='none'">
       <span class="button-label">บันทึก</span>
     </button>
   </div>
