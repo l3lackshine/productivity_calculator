@@ -236,14 +236,14 @@ input:focus{border-color:#62a8ff;box-shadow:0 0 0 3px #3185ff22}
   overflow:hidden;
 }
 .button-asset{
-  width:34px;height:34px;object-fit:contain;display:block;
-  flex:0 0 auto;
+  width:34px;height:34px;min-width:34px;min-height:34px;max-width:34px;max-height:34px;object-fit:contain;display:block;
+  flex:0 0 34px;
   user-select:none;-webkit-user-drag:none;
 }
 .button-label{line-height:1;
 }
 @media(max-width:390px){
-  .button-asset{width:29px;height:29px}
+  .button-asset{width:29px;height:29px;min-width:29px;min-height:29px;max-width:29px;max-height:29px;flex-basis:29px}
   .asset-button{gap:8px}
 }
 
@@ -334,13 +334,13 @@ input:focus{border-color:#62a8ff;box-shadow:0 0 0 3px #3185ff22}
   function startTimer(){
     if(running)return;
     startAt=performance.now()-elapsed; running=true;
-    start.textContent="■ หยุด"; start.className="stop"; record.disabled=false; reset.disabled=false;
+    start.querySelector(".button-label").textContent="หยุด"; start.className="stop"; record.disabled=false; reset.disabled=false;
     raf=requestAnimationFrame(frame);
   }
   function stopTimer(){
     if(!running)return;
     elapsed=performance.now()-startAt; running=false; cancelAnimationFrame(raf);
-    draw(elapsed); start.textContent="▶ เริ่ม"; start.className="start";
+    draw(elapsed); start.querySelector(".button-label").textContent="เริ่ม"; start.className="start";
     record.disabled=true;
   }
   start.onclick=()=>running?stopTimer():startTimer();
@@ -365,7 +365,7 @@ input:focus{border-color:#62a8ff;box-shadow:0 0 0 3px #3185ff22}
   function refresh(){count.textContent=`${samples.length}/3`;}
   reset.onclick=()=>{
     running=false;cancelAnimationFrame(raf);elapsed=0;samples=[];
-    draw(0);start.textContent="▶ เริ่ม";start.className="start";record.disabled=true;
+    draw(0);start.querySelector(".button-label").textContent="เริ่ม";start.className="start";record.disabled=true;
     records.innerHTML="";inputs.forEach(x=>x.value="");refresh();
     $("avg").textContent="—";$("hour").textContent="—";
   };
